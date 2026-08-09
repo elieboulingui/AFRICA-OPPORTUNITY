@@ -1,277 +1,127 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import {
-  ThumbsUp,
-  MessageCircle,
-  Share2,
-  Send,
-  MoreHorizontal,
-  Image as ImageIcon,
-  Video,
-  Calendar,
-  Article,
-  Briefcase,
-  MapPin,
-  Clock,
-  Globe,
-  Users,
-  Plus,
-  ChevronDown,
-  Heart,
-  Repeat2,
-} from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Bell, UserPlus, ThumbsUp, MessageSquare, Briefcase, Eye } from "lucide-react"
 
-interface PostCardProps {
-  author: {
-    name: string
-    title: string
-    avatar: string
-    time: string
-  }
-  content: string
-  image?: string
-  likes: number
-  comments: number
-  shares: number
-  liked: boolean
-}
-
-export function PostCard({ author, content, image, likes, comments, shares, liked }: PostCardProps) {
-  const [isLiked, setIsLiked] = useState(liked)
-  const [likesCount, setLikesCount] = useState(likes)
-  const [showComments, setShowComments] = useState(false)
-  const [commentText, setCommentText] = useState("")
-  const [commentsList, setCommentsList] = useState([
-    {
-      id: 1,
-      author: "Marie Laurent",
-      avatar: "/avatars/user3.jpg",
-      text: "Super intéressant ! Merci pour le partage 🙌",
-      time: "2h",
-    },
-    {
-      id: 2,
-      author: "Thomas Petit",
-      avatar: "/avatars/user4.jpg",
-      text: "Complètement d'accord avec toi !",
-      time: "1h",
-    },
+export default function NotificationsPage() {
+  const [notifications] = useState([
+    { id: 1, type: "connection", name: "Sophie Martin", content: "a accepté votre invitation", time: "5 min", read: false, icon: UserPlus },
+    { id: 2, type: "like", name: "Thomas Dubois", content: "a aimé votre publication", time: "15 min", read: false, icon: ThumbsUp },
+    { id: 3, type: "comment", name: "Marie Lefevre", content: "a commenté votre publication", time: "30 min", read: true, icon: MessageSquare },
+    { id: 4, type: "job", name: "TechCorp", content: "recherche un Senior Developer", time: "1h", read: true, icon: Briefcase },
+    { id: 5, type: "view", name: "Anonymous", content: "3 personnes ont consulté votre profil", time: "5h", read: true, icon: Eye },
   ])
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikesCount(likesCount - 1)
-    } else {
-      setLikesCount(likesCount + 1)
-    }
-    setIsLiked(!isLiked)
-  }
-
-  const handleAddComment = () => {
-    if (commentText.trim()) {
-      setCommentsList([
-        ...commentsList,
-        {
-          id: commentsList.length + 1,
-          author: "Vous",
-          avatar: "/avatars/current-user.jpg",
-          text: commentText,
-          time: "À l'instant",
-        },
-      ])
-      setCommentText("")
-    }
-  }
+  const unreadCount = notifications.filter(n => !n.read).length
 
   return (
-    <Card className="mb-4 border-gray-200 shadow-sm">
-      <CardHeader className="pb-2">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
-              <AvatarImage src={author.avatar} alt={author.name} />
-              <AvatarFallback>{author.name[0]}</AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="flex items-center gap-1">
-                <h3 className="font-semibold text-sm hover:text-blue-600 hover:underline cursor-pointer">
-                  {author.name}
-                </h3>
-                <span className="text-gray-400">•</span>
-                <span className="text-xs text-blue-600 font-medium cursor-pointer hover:underline">
-                  Suivre
-                </span>
-              </div>
-              <p className="text-xs text-gray-500">{author.title}</p>
-              <div className="flex items-center gap-1 text-xs text-gray-400 mt-0.5">
-                <span>{author.time}</span>
-                <span>•</span>
-                <Globe className="h-3 w-3" />
-              </div>
-            </div>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-gray-600">
-                <MoreHorizontal className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem>Enregistrer</DropdownMenuItem>
-              <DropdownMenuItem>Masquer ce post</DropdownMenuItem>
-              <DropdownMenuItem>Signaler</DropdownMenuItem>
-              <DropdownMenuItem>Ne plus suivre</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+          <h1 className="text-xl font-bold flex items-center gap-2">
+            <Bell className="h-5 w-5" />Notifications
+          </h1>
+          {unreadCount > 0 && <Badge variant="destructive">{unreadCount} nouvelles</Badge>}
         </div>
-      </CardHeader>
-
-      <CardContent className="pb-2">
-        <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{content}</p>
-        {image && (
-          <div className="mt-3 -mx-6">
-            <div className="relative w-full h-64 md:h-96 bg-gray-100">
-              <Image
-                src={image}
-                alt="Post image"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 600px"
-              />
-            </div>
-          </div>
-        )}
-      </CardContent>
-
-      <CardFooter className="flex flex-col gap-2 pb-2 pt-0">
-        <div className="flex items-center justify-between w-full text-xs text-gray-500 px-1">
-          <div className="flex items-center gap-1">
-            <div className="flex -space-x-1">
-              <div className="h-4 w-4 rounded-full bg-blue-500 flex items-center justify-center">
-                <ThumbsUp className="h-3 w-3 text-white" />
-              </div>
-              <div className="h-4 w-4 rounded-full bg-red-500 flex items-center justify-center">
-                <Heart className="h-3 w-3 text-white" />
-              </div>
-            </div>
-            <span>{likesCount}</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setShowComments(!showComments)}
-              className="hover:text-blue-600 hover:underline cursor-pointer"
-            >
-              {commentsList.length} commentaires
-            </button>
-            <span>{shares} partages</span>
-          </div>
-        </div>
-
-        <Separator className="my-0" />
-
-        <div className="flex items-center justify-between w-full">
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`flex-1 gap-2 ${isLiked ? "text-blue-600" : "text-gray-500"} hover:bg-gray-50`}
-            onClick={handleLike}
-          >
-            <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-blue-600" : ""}`} />
-            <span>J'aime</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-1 gap-2 text-gray-500 hover:bg-gray-50"
-            onClick={() => setShowComments(!showComments)}
-          >
-            <MessageCircle className="h-4 w-4" />
-            <span>Commenter</span>
-          </Button>
-          <Button variant="ghost" size="sm" className="flex-1 gap-2 text-gray-500 hover:bg-gray-50">
-            <Repeat2 className="h-4 w-4" />
-            <span>Republier</span>
-          </Button>
-          <Button variant="ghost" size="sm" className="flex-1 gap-2 text-gray-500 hover:bg-gray-50">
-            <Send className="h-4 w-4" />
-            <span>Envoyer</span>
-          </Button>
-        </div>
-
-        {showComments && (
-          <div className="w-full pt-2 space-y-3">
-            <Separator />
-            <div className="flex gap-2 items-start">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/avatars/current-user.jpg" />
-                <AvatarFallback>VO</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 flex gap-2">
-                <Input
-                  placeholder="Ajouter un commentaire..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
-                  className="flex-1 rounded-full bg-gray-50 border-gray-200 text-sm"
-                />
-                <Button
-                  size="icon"
-                  onClick={handleAddComment}
-                  disabled={!commentText.trim()}
-                  className="rounded-full h-8 w-8"
-                >
-                  <Send className="h-3 w-3" />
-                </Button>
-              </div>
-            </div>
-            <div className="space-y-3">
-              {commentsList.map((comment) => (
-                <div key={comment.id} className="flex gap-2 items-start group">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={comment.avatar} />
-                    <AvatarFallback>{comment.author[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="bg-gray-50 rounded-lg px-3 py-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold hover:text-blue-600 hover:underline cursor-pointer">
-                          {comment.author}
-                        </span>
-                        <span className="text-xs text-gray-400">{comment.time}</span>
-                      </div>
-                      <p className="text-sm text-gray-700 mt-0.5">{comment.text}</p>
-                    </div>
-                    <div className="flex items-center gap-3 mt-1 ml-1">
-                      <button className="text-xs text-gray-500 hover:text-blue-600 font-medium">
-                        J'aime
-                      </button>
-                      <button className="text-xs text-gray-500 hover:text-blue-600 font-medium">
-                        Répondre
-                      </button>
-                    </div>
-                  </div>
+      </header>
+      <main className="max-w-3xl mx-auto px-4 py-6">
+        <Card>
+          <CardContent className="p-0">
+            <Tabs defaultValue="all">
+              <TabsList className="w-full rounded-none">
+                <TabsTrigger value="all" className="flex-1">Toutes</TabsTrigger>
+                <TabsTrigger value="unread" className="flex-1">Non lues ({unreadCount})</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </CardContent>
+        </Card>
+        <Card className="mt-4">
+          <div className="divide-y">
+            {notifications.map((notif) => (
+              <div key={notif.id} className={`p-4 hover:bg-gray-50 flex items-start gap-3 ${!notif.read ? 'bg-blue-50' : ''}`}>
+                <Avatar>
+                  <AvatarFallback>{notif.name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <p className="text-sm">
+                    <span className="font-semibold">{notif.name}</span> {notif.content}
+                  </p>
+                  <span className="text-xs text-gray-400">{notif.time}</span>
                 </div>
-              ))}
-            </div>
+                <notif.icon className="h-5 w-5 text-gray-400" />
+              </div>
+            ))}
           </div>
-        )}
-      </CardFooter>
-    </Card>
+        </Card>
+      </main>
+    </div>
   )
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+}"use client"
+
+import { useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Bell, UserPlus, ThumbsUp, MessageSquare, Briefcase, Eye } from "lucide-react"
+
+export default function NotificationsPage() {
+  const [notifications] = useState([
+    { id: 1, type: "connection", name: "Sophie Martin", content: "a accepté votre invitation", time: "5 min", read: false, icon: UserPlus },
+    { id: 2, type: "like", name: "Thomas Dubois", content: "a aimé votre publication", time: "15 min", read: false, icon: ThumbsUp },
+    { id: 3, type: "comment", name: "Marie Lefevre", content: "a commenté votre publication", time: "30 min", read: true, icon: MessageSquare },
+    { id: 4, type: "job", name: "TechCorp", content: "recherche un Senior Developer", time: "1h", read: true, icon: Briefcase },
+    { id: 5, type: "view", name: "Anonymous", content: "3 personnes ont consulté votre profil", time: "5h", read: true, icon: Eye },
+  ])
+
+  const unreadCount = notifications.filter(n => !n.read).length
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+          <h1 className="text-xl font-bold flex items-center gap-2">
+            <Bell className="h-5 w-5" />Notifications
+          </h1>
+          {unreadCount > 0 && <Badge variant="destructive">{unreadCount} nouvelles</Badge>}
+        </div>
+      </header>
+      <main className="max-w-3xl mx-auto px-4 py-6">
+        <Card>
+          <CardContent className="p-0">
+            <Tabs defaultValue="all">
+              <TabsList className="w-full rounded-none">
+                <TabsTrigger value="all" className="flex-1">Toutes</TabsTrigger>
+                <TabsTrigger value="unread" className="flex-1">Non lues ({unreadCount})</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </CardContent>
+        </Card>
+        <Card className="mt-4">
+          <div className="divide-y">
+            {notifications.map((notif) => (
+              <div key={notif.id} className={`p-4 hover:bg-gray-50 flex items-start gap-3 ${!notif.read ? 'bg-blue-50' : ''}`}>
+                <Avatar>
+                  <AvatarFallback>{notif.name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <p className="text-sm">
+                    <span className="font-semibold">{notif.name}</span> {notif.content}
+                  </p>
+                  <span className="text-xs text-gray-400">{notif.time}</span>
+                </div>
+                <notif.icon className="h-5 w-5 text-gray-400" />
+              </div>
+            ))}
+          </div>
+        </Card>
+      </main>
+    </div>
+  )
+}
