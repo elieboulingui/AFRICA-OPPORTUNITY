@@ -1,21 +1,21 @@
 "use client"
 
+import * as React from "react"
 import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bubble, BubbleContent } from "@/components/ui/bubble"
-import { Message, MessageAvatar, MessageContent } from "@/components/ui/message"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Separator } from "@/components/ui/separator"
 import {
-  SendIcon,
-  ImageIcon,
-  PaperclipIcon,
-  SmileIcon,
-  MoreHorizontalIcon,
-  ThumbsUpIcon,
-  MessageCircleIcon,
-  ShareIcon,
-  BookmarkIcon,
+  Send,
+  Image,
+  Paperclip,
+  Smile,
+  MoreHorizontal,
+  ThumbsUp,
+  Phone,
+  Share,
+  Bookmark,
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -23,15 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
 
-// Types pour les messages
 interface MessageType {
   id: string
   content: string
@@ -51,7 +43,6 @@ interface MessageType {
   }>
 }
 
-// Données de démonstration
 const currentUser = {
   id: "user-1",
   name: "Sophie Martin",
@@ -71,28 +62,24 @@ const contactUser = {
 const initialMessages: MessageType[] = [
   {
     id: "1",
-    content: "Bonjour Sophie ! J'ai vu votre profil et votre expérience chez DesignStudio m'a beaucoup impressionné. Nous recherchons justement un Senior Product Designer pour rejoindre notre équipe.",
+    content: "Bonjour Sophie ! J'ai vu votre profil et votre expérience chez DesignStudio m'a beaucoup impressionné.",
     sender: contactUser,
     timestamp: new Date(Date.now() - 3600000 * 2),
-    reactions: [
-      { emoji: "👍", count: 1, reacted: false },
-    ],
+    reactions: [{ emoji: "👍", count: 1, reacted: false }],
   },
   {
     id: "2",
-    content: "Bonjour Thomas ! Merci pour votre message. Je suis effectivement ouverte à de nouvelles opportunités. Pouvez-vous m'en dire plus sur le poste et l'équipe ?",
+    content: "Bonjour Thomas ! Merci pour votre message. Je suis ouverte à de nouvelles opportunités.",
     sender: currentUser,
     timestamp: new Date(Date.now() - 3600000),
     isRead: true,
   },
   {
     id: "3",
-    content: "Bien sûr ! Il s'agit d'un poste en CDI dans notre bureau de Paris. L'équipe design compte actuellement 8 personnes et nous travaillons sur des projets innovants dans la fintech. Le package comprend un salaire compétitif entre 65-80k€ selon expérience, des stock options, et une mutuelle premium.",
+    content: "Super ! Il s'agit d'un poste en CDI à Paris. Package : 65-80k€, stock options, mutuelle premium.",
     sender: contactUser,
     timestamp: new Date(Date.now() - 1800000),
-    reactions: [
-      { emoji: "❤️", count: 1, reacted: true },
-    ],
+    reactions: [{ emoji: "❤️", count: 1, reacted: true }],
   },
 ]
 
@@ -115,12 +102,11 @@ export function LinkedInMessaging() {
     setMessages([...messages, message])
     setNewMessage("")
 
-    // Simuler une réponse
     setIsTyping(true)
     setTimeout(() => {
       const reply: MessageType = {
         id: (Date.now() + 1).toString(),
-        content: "Excellent ! Je vous envoie la fiche de poste détaillée par email. Seriez-vous disponible pour un premier appel cette semaine ?",
+        content: "Excellent ! Seriez-vous disponible pour un appel cette semaine ?",
         sender: contactUser,
         timestamp: new Date(),
         reactions: [],
@@ -162,124 +148,84 @@ export function LinkedInMessaging() {
     )
   }
 
-  const formatTime = (date: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const minutes = Math.floor(diff / 60000)
-    
-    if (minutes < 1) return "À l'instant"
-    if (minutes < 60) return `Il y a ${minutes} min`
-    
-    const hours = Math.floor(minutes / 60)
-    if (hours < 24) return `Il y a ${hours}h`
-    
-    return date.toLocaleDateString("fr-FR", {
-      month: "short",
-      day: "numeric",
-    })
-  }
+const formatTime = (date: Date) => {
+  const diff = new Date().getTime() - date.getTime()
+  const minutes = Math.floor(diff / 60000)
+  if (minutes < 1) return "À l'instant"
+  if (minutes < 60) return `Il y a ${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `Il y a ${hours}h`
+  return date.toLocaleDateString("fr-FR", { month: "short", day: "numeric" })
+}
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      {/* En-tête de la conversation */}
-      <div className="border-b bg-card px-4 py-3">
+    <div className="flex h-screen flex-col bg-white">
+      {/* Header */}
+      <div className="border-b px-4 py-3">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             <AvatarImage src={contactUser.avatar} />
             <AvatarFallback>{contactUser.initials}</AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <h2 className="font-semibold text-foreground">{contactUser.name}</h2>
-            <p className="text-xs text-muted-foreground">{contactUser.headline}</p>
+            <h2 className="font-semibold text-sm">{contactUser.name}</h2>
+            <p className="text-xs text-gray-500">{contactUser.headline}</p>
           </div>
           <div className="flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MessageCircleIcon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Appel vidéo</p>
-              </TooltipContent>
-            </Tooltip>
-            
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Phone className="h-4 w-4" />
+            </Button>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontalIcon className="h-4 w-4" />
+                  <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>Voir le profil</DropdownMenuItem>
                 <DropdownMenuItem>Marquer comme non lu</DropdownMenuItem>
                 <DropdownMenuItem>Mettre en sourdine</DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive">
-                  Bloquer
-                </DropdownMenuItem>
+                <DropdownMenuItem className="text-red-600">Bloquer</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
       </div>
 
-      {/* Zone des messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/30">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         {messages.map((message) => {
           const isCurrentUser = message.sender.id === currentUser.id
           
           return (
-            <div key={message.id} className="space-y-1">
-              {/* Groupe de date */}
+            <div key={message.id} className="space-y-2">
               {message.id === messages[0].id && (
                 <div className="flex items-center gap-3 mb-4">
                   <Separator className="flex-1" />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    {message.timestamp.toLocaleDateString("fr-FR", {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    })}
+                  <span className="text-xs text-gray-500">
+                    {message.timestamp.toLocaleDateString("fr-FR", { weekday: "long", month: "long", day: "numeric" })}
                   </span>
                   <Separator className="flex-1" />
                 </div>
               )}
               
-              <Message
-                className={cn(
-                  "gap-3",
-                  isCurrentUser && "flex-row-reverse"
-                )}
-              >
-                <MessageAvatar className="mt-1">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={message.sender.avatar} />
-                    <AvatarFallback className="text-xs">
-                      {message.sender.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                </MessageAvatar>
+              <div className={`flex gap-3 ${isCurrentUser ? "flex-row-reverse" : ""}`}>
+                <Avatar className="h-8 w-8 mt-1">
+                  <AvatarImage src={message.sender.avatar} />
+                  <AvatarFallback>{message.sender.initials}</AvatarFallback>
+                </Avatar>
                 
-                <MessageContent className={cn(
-                  "max-w-[70%] space-y-2",
-                  isCurrentUser && "items-end"
-                )}>
+                <div className={`max-w-[70%] space-y-1 ${isCurrentUser ? "items-end" : ""}`}>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-foreground">
-                      {message.sender.name}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatTime(message.timestamp)}
-                    </span>
+                    <span className="text-sm font-semibold">{message.sender.name}</span>
+                    <span className="text-xs text-gray-500">{formatTime(message.timestamp)}</span>
                   </div>
                   
-                  <Bubble
-                    variant={isCurrentUser ? "sent" : "received"}
-                  >
-                    <BubbleContent className="text-sm">
-                      {message.content}
-                    </BubbleContent>
-                  </Bubble>
+                  <div className={`rounded-2xl px-4 py-2 text-sm ${
+                    isCurrentUser ? "bg-blue-600 text-white" : "bg-white border"
+                  }`}>
+                    {message.content}
+                  </div>
 
                   {/* Réactions */}
                   {message.reactions && message.reactions.length > 0 && (
@@ -288,93 +234,51 @@ export function LinkedInMessaging() {
                         <button
                           key={reaction.emoji}
                           onClick={() => handleReaction(message.id, reaction.emoji)}
-                          className={cn(
-                            "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition-colors hover:bg-accent",
+                          className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs ${
                             reaction.reacted
-                              ? "border-primary bg-primary/10 text-primary"
-                              : "border-border bg-background text-foreground"
-                          )}
+                              ? "border-blue-600 bg-blue-50 text-blue-600"
+                              : "border-gray-300 bg-white"
+                          }`}
                         >
                           <span>{reaction.emoji}</span>
-                          <span className="font-medium">{reaction.count}</span>
+                          <span>{reaction.count}</span>
                         </button>
                       ))}
                     </div>
                   )}
 
-                  {/* Actions sur le message */}
-                  <div className={cn(
-                    "flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100",
-                    isCurrentUser && "flex-row-reverse"
-                  )}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7"
-                          onClick={() => handleReaction(message.id, "👍")}
-                        >
-                          <ThumbsUpIcon className="h-3.5 w-3.5" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>J'aime</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7"
-                          onClick={() => {
-                            navigator.clipboard.writeText(message.content)
-                          }}
-                        >
-                          <ShareIcon className="h-3.5 w-3.5" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Copier</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-7 w-7">
-                          <BookmarkIcon className="h-3.5 w-3.5" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Enregistrer</p>
-                      </TooltipContent>
-                    </Tooltip>
+                  {/* Actions */}
+                  <div className={`flex items-center gap-1 ${isCurrentUser ? "flex-row-reverse" : ""}`}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleReaction(message.id, "👍")}>
+                      <ThumbsUp className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-7 w-7">
+                      <Share className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-7 w-7">
+                      <Bookmark className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
-                </MessageContent>
-              </Message>
+                </div>
+              </div>
             </div>
           )
         })}
 
-        {/* Indicateur de frappe */}
         {isTyping && (
           <div className="flex items-center gap-2 pl-11">
             <div className="flex gap-1">
-              <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:-0.3s]" />
-              <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:-0.15s]" />
-              <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40" />
+              <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: "-0.3s" }} />
+              <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: "-0.15s" }} />
+              <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
             </div>
-            <span className="text-xs text-muted-foreground">
-              {contactUser.name} écrit...
-            </span>
+            <span className="text-xs text-gray-500">{contactUser.name} écrit...</span>
           </div>
         )}
       </div>
 
-      {/* Zone de saisie */}
-      <div className="border-t bg-card p-4">
+      {/* Input */}
+      <div className="border-t bg-white p-4">
         <div className="flex items-end gap-3">
           <div className="flex-1">
             <Textarea
@@ -382,60 +286,32 @@ export function LinkedInMessaging() {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Écrivez un message..."
-              className="min-h-[60px] resize-none bg-muted/50"
+              className="min-h-[60px] resize-none bg-gray-50"
               rows={2}
             />
           </div>
           
           <div className="flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <PaperclipIcon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Joindre un fichier</p>
-              </TooltipContent>
-            </Tooltip>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <ImageIcon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Envoyer une image</p>
-              </TooltipContent>
-            </Tooltip>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <SmileIcon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Émojis</p>
-              </TooltipContent>
-            </Tooltip>
-            
-            <Button
-              onClick={handleSendMessage}
-              disabled={!newMessage.trim()}
-              size="icon"
-              className="h-9 w-9"
-            >
-              <SendIcon className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Paperclip className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Image className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Smile className="h-4 w-4" />
+            </Button>
+            <Button onClick={handleSendMessage} disabled={!newMessage.trim()} size="icon" className="h-9 w-9">
+              <Send className="h-4 w-4" />
             </Button>
           </div>
         </div>
-        
-        <p className="mt-2 text-xs text-muted-foreground">
+        <p className="mt-2 text-xs text-gray-500">
           Appuyez sur Entrée pour envoyer, Maj+Entrée pour un saut de ligne
         </p>
       </div>
     </div>
   )
 }
+
+export default LinkedInMessaging

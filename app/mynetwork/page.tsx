@@ -20,6 +20,7 @@ import {
   BellRing,
   Users,
   Briefcase,
+  Search,
   MessageSquare,
   ThumbsUp,
   Share2,

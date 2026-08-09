@@ -4,12 +4,11 @@ import { useState } from "react"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Select,
   SelectContent,
@@ -31,45 +30,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
-  Search,
-  MapPin,
-  Briefcase,
-  DollarSign,
-  Clock,
-  Filter,
-  X,
-  SlidersHorizontal,
-  Building2,
-  Users,
-  GraduationCap,
-  Bookmark,
-  Bell,
-  BellRing,
-  Mail,
-  Smartphone,
-  Settings,
-  Zap,
-  Star,
-  TrendingUp,
-  Eye,
-  Target,
-  ArrowUp,
-  ArrowDown,
-  ExternalLink,
-  Share2,
-  MoreHorizontal,
-  Heart,
-  ChevronRight,
-  Compass,
-  Grid,
-  List,
-  ArrowUpDown,
-  Plus,
-  Trash2,
-  Globe,
+  Search, MapPin, Briefcase, DollarSign, Clock, Filter, X,
+  SlidersHorizontal, Building2, Users, GraduationCap, Bookmark,
+  Bell, BellRing, Mail, Smartphone, Settings, Zap, Star,
+  TrendingUp, Eye, Target, ArrowUp, ArrowDown, ExternalLink,
+  Share2, MoreHorizontal, Compass, Grid, List, ArrowUpDown, Plus, Trash2,
 } from "lucide-react"
 
-// Types
 interface Job {
   id: string
   title: string
@@ -86,162 +53,57 @@ interface Job {
   easyApply?: boolean
 }
 
-interface Company {
-  name: string
-  logo: string
-  industry: string
-  employees: string
-  openPositions: number
-  rating: number
-  location: string
-  hiring: boolean
-}
-
-interface SavedJob {
-  id: number
-  title: string
-  company: string
-  logo: string
-  location: string
-  saved: string
-}
-
-// Composant JobCard
 function JobCard({ job }: { job: Job }) {
   const [isSaved, setIsSaved] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
 
   return (
-    <Card className={`border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 ${job.promoted ? 'border-l-4 border-l-blue-600' : ''}`}>
+    <Card className={`border-gray-200 shadow-sm hover:shadow-md transition-all ${job.promoted ? 'border-l-4 border-l-blue-600' : ''}`}>
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
-          <div className="relative h-14 w-14 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
-            <Image
-              src={job.companyLogo}
-              alt={job.company}
-              fill
-              className="object-cover p-1"
-            />
+          <div className="relative h-14 w-14 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border">
+            <Image src={job.companyLogo} alt={job.company} fill className="object-cover p-1" />
           </div>
-
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-semibold text-base hover:text-blue-600 hover:underline cursor-pointer truncate">
-                    {job.title}
-                  </h3>
-                  {job.promoted && (
-                    <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
-                      <Zap className="h-3 w-3 mr-1" />
-                      Promu
-                    </Badge>
-                  )}
-                  {job.easyApply && (
-                    <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200 text-xs">
-                      Candidature simplifiée
-                    </Badge>
-                  )}
+                  <h3 className="font-semibold text-base hover:text-blue-600 cursor-pointer truncate">{job.title}</h3>
+                  {job.promoted && <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-xs"><Zap className="h-3 w-3 mr-1" />Promu</Badge>}
+                  {job.easyApply && <Badge variant="secondary" className="bg-green-50 text-green-700 text-xs">Candidature simplifiée</Badge>}
                 </div>
                 <p className="text-sm text-gray-600 mt-0.5">{job.company}</p>
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-gray-600">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
+                <DropdownMenuTrigger>
+                  <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem>
-                    <Bookmark className="h-4 w-4 mr-2" />
-                    Sauvegarder
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Share2 className="h-4 w-4 mr-2" />
-                    Partager
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Voir l'entreprise
-                  </DropdownMenuItem>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem><Bookmark className="h-4 w-4 mr-2" />Sauvegarder</DropdownMenuItem>
+                  <DropdownMenuItem><Share2 className="h-4 w-4 mr-2" />Partager</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
-              <div className="flex items-center gap-1">
-                <MapPin className="h-3 w-3" />
-                <span>{job.location}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Briefcase className="h-3 w-3" />
-                <span>{job.type}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <DollarSign className="h-3 w-3" />
-                <span>{job.salary}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                <span>{job.posted}</span>
-              </div>
+              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{job.location}</span>
+              <span className="flex items-center gap-1"><Briefcase className="h-3 w-3" />{job.type}</span>
+              <span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />{job.salary}</span>
+              <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{job.posted}</span>
             </div>
-
-            <p className="text-sm text-gray-600 mt-3 line-clamp-2">
-              {job.description}
-            </p>
-
+            <p className="text-sm text-gray-600 mt-3 line-clamp-2">{job.description}</p>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {job.skills.slice(0, 4).map((skill) => (
-                <Badge
-                  key={skill}
-                  variant="outline"
-                  className="text-xs bg-gray-50 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 cursor-pointer transition-colors"
-                >
-                  {skill}
-                </Badge>
+                <Badge key={skill} variant="outline" className="text-xs bg-gray-50">{skill}</Badge>
               ))}
-              {job.skills.length > 4 && (
-                <Badge variant="outline" className="text-xs bg-gray-50">
-                  +{job.skills.length - 4}
-                </Badge>
-              )}
             </div>
-
             <div className="flex items-center justify-between mt-4 pt-3 border-t">
-              <div className="flex items-center gap-1 text-xs text-gray-500">
-                <Users className="h-3 w-3" />
-                <span>{job.applicants} candidats</span>
-                {job.applicants > 50 && (
-                  <>
-                    <span>•</span>
-                    <TrendingUp className="h-3 w-3 text-green-600" />
-                    <span className="text-green-600">Populaire</span>
-                  </>
-                )}
-              </div>
+              <span className="text-xs text-gray-500 flex items-center gap-1"><Users className="h-3 w-3" />{job.applicants} candidats</span>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={`h-8 w-8 ${isSaved ? 'text-blue-600' : 'text-gray-400'} hover:text-blue-600`}
-                  onClick={() => setIsSaved(!isSaved)}
-                >
-                  <Bookmark className={`h-4 w-4 ${isSaved ? 'fill-blue-600' : ''}`} />
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsSaved(!isSaved)}>
+                  <Bookmark className={`h-4 w-4 ${isSaved ? 'fill-blue-600 text-blue-600' : 'text-gray-400'}`} />
                 </Button>
-                <Button
-                  size="sm"
-                  className={`rounded-full ${isApplied ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}`}
-                  onClick={() => setIsApplied(!isApplied)}
-                >
-                  {isApplied ? (
-                    <>
-                      <Star className="h-3 w-3 mr-1 fill-current" />
-                      Candidature envoyée
-                    </>
-                  ) : (
-                    'Postuler'
-                  )}
+                <Button size="sm" className={`rounded-full ${isApplied ? 'bg-green-600' : 'bg-blue-600'}`} onClick={() => setIsApplied(!isApplied)}>
+                  {isApplied ? '✓ Envoyée' : 'Postuler'}
                 </Button>
               </div>
             </div>
@@ -252,439 +114,131 @@ function JobCard({ job }: { job: Job }) {
   )
 }
 
-// Composant JobSearchFilters
 function JobSearchFilters() {
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [showAdvanced, setShowAdvanced] = useState(false)
-
-  const removeFilter = (filter: string) => {
-    setActiveFilters(activeFilters.filter(f => f !== filter))
-  }
-
-  const quickFilters = [
-    "Télétravail",
-    "Temps plein",
-    "CDI",
-    "Startup",
-    "Grande entreprise",
-    "Moins de 10 km",
-  ]
+  const quickFilters = ["Télétravail", "Temps plein", "CDI", "Startup", "Grande entreprise"]
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-3">
+    <div className="bg-white rounded-lg shadow-sm border p-4 space-y-3">
       <div className="flex gap-2">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input placeholder="Titre du poste, compétence ou entreprise" className="pl-10" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input placeholder="Titre du poste..." className="pl-10" />
         </div>
         <div className="flex-1 relative">
-          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input placeholder="Ville, région ou télétravail" className="pl-10" />
+          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input placeholder="Ville..." className="pl-10" />
         </div>
-        <Button className="gap-2">
-          <Search className="h-4 w-4" />
-          Rechercher
-        </Button>
+        <Button><Search className="h-4 w-4 mr-1" />Rechercher</Button>
       </div>
-
-      <div className="flex items-center gap-2 flex-wrap">
-        {quickFilters.map((filter) => (
-          <Badge
-            key={filter}
-            variant="outline"
-            className="cursor-pointer hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors px-3 py-1"
-            onClick={() => {
-              if (activeFilters.includes(filter)) {
-                removeFilter(filter)
-              } else {
-                setActiveFilters([...activeFilters, filter])
-              }
-            }}
-          >
-            {filter}
-            {activeFilters.includes(filter) && (
-              <X className="h-3 w-3 ml-1" />
-            )}
+      <div className="flex flex-wrap gap-2">
+        {quickFilters.map((f) => (
+          <Badge key={f} variant="outline" className="cursor-pointer hover:bg-blue-50" onClick={() => setActiveFilters(activeFilters.includes(f) ? activeFilters.filter(x => x !== f) : [...activeFilters, f])}>
+            {f} {activeFilters.includes(f) && <X className="h-3 w-3 ml-1" />}
           </Badge>
         ))}
       </div>
-
-      <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-gray-500 gap-2"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-        >
-          <SlidersHorizontal className="h-4 w-4" />
-          Filtres avancés
-        </Button>
-        {activeFilters.length > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-red-500 gap-2"
-            onClick={() => setActiveFilters([])}
-          >
-            <X className="h-4 w-4" />
-            Effacer les filtres
-          </Button>
-        )}
-      </div>
-
+      <Button variant="ghost" size="sm" onClick={() => setShowAdvanced(!showAdvanced)}>
+        <SlidersHorizontal className="h-4 w-4 mr-1" />Filtres avancés
+      </Button>
       {showAdvanced && (
-        <div className="space-y-3 pt-3 border-t">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
-                <Building2 className="h-3 w-3" />
-                Type d'entreprise
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="startup">Startup (1-50)</SelectItem>
-                  <SelectItem value="sme">PME (51-250)</SelectItem>
-                  <SelectItem value="mid">ETI (251-5000)</SelectItem>
-                  <SelectItem value="corp">Grande entreprise (5000+)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
-                <DollarSign className="h-3 w-3" />
-                Salaire minimum
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="30">30K€+</SelectItem>
-                  <SelectItem value="45">45K€+</SelectItem>
-                  <SelectItem value="60">60K€+</SelectItem>
-                  <SelectItem value="80">80K€+</SelectItem>
-                  <SelectItem value="100">100K€+</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
-                <GraduationCap className="h-3 w-3" />
-                Niveau d'expérience
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="internship">Stage</SelectItem>
-                  <SelectItem value="entry">Débutant</SelectItem>
-                  <SelectItem value="mid">Intermédiaire</SelectItem>
-                  <SelectItem value="senior">Senior</SelectItem>
-                  <SelectItem value="lead">Lead/Manager</SelectItem>
-                  <SelectItem value="exec">Direction</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                Date de publication
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="24h">Dernières 24h</SelectItem>
-                  <SelectItem value="week">Cette semaine</SelectItem>
-                  <SelectItem value="2weeks">2 dernières semaines</SelectItem>
-                  <SelectItem value="month">Ce mois</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" size="sm">
-              Réinitialiser
-            </Button>
-            <Button size="sm" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Appliquer les filtres
-            </Button>
-          </div>
+        <div className="grid grid-cols-2 gap-3 pt-3 border-t">
+          <Select>
+            <SelectTrigger><SelectValue placeholder="Type d'entreprise" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="startup">Startup</SelectItem>
+              <SelectItem value="corp">Grande entreprise</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select>
+            <SelectTrigger><SelectValue placeholder="Salaire min" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="30">30K€+</SelectItem>
+              <SelectItem value="50">50K€+</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       )}
     </div>
   )
 }
 
-// Composant JobAlertCard
 function JobAlertCard() {
-  const [emailAlerts, setEmailAlerts] = useState(true)
-  const [pushAlerts, setPushAlerts] = useState(false)
-
   return (
     <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between">
-          <div className="flex items-start gap-3">
-            <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-              <Bell className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-sm flex items-center gap-2">
-                Alertes emploi
-                <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
-                  <Zap className="h-3 w-3 mr-1" />
-                  Recommandé
-                </Badge>
-              </h3>
-              <p className="text-xs text-gray-600 mt-0.5">
-                Recevez des notifications pour les offres correspondant à votre profil
-              </p>
-              
-              <div className="flex items-center gap-4 mt-3">
-                <Button
-                  variant={emailAlerts ? "default" : "outline"}
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => setEmailAlerts(!emailAlerts)}
-                >
-                  <Mail className="h-3 w-3" />
-                  Email
-                  {emailAlerts && <BellRing className="h-3 w-3" />}
-                </Button>
-                <Button
-                  variant={pushAlerts ? "default" : "outline"}
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => setPushAlerts(!pushAlerts)}
-                >
-                  <Smartphone className="h-3 w-3" />
-                  Push
-                  {pushAlerts && <BellRing className="h-3 w-3" />}
-                </Button>
-              </div>
-            </div>
+      <CardContent className="p-4 flex items-start gap-3">
+        <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center"><Bell className="h-5 w-5 text-white" /></div>
+        <div className="flex-1">
+          <h3 className="font-semibold text-sm">Alertes emploi <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs"><Zap className="h-3 w-3 mr-1" />Recommandé</Badge></h3>
+          <p className="text-xs text-gray-600 mt-0.5">Recevez des notifications pour les offres correspondant à votre profil</p>
+          <div className="flex gap-2 mt-2">
+            <Button size="sm"><Mail className="h-3 w-3 mr-1" />Email</Button>
+            <Button size="sm" variant="outline"><Smartphone className="h-3 w-3 mr-1" />Push</Button>
           </div>
-          
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Settings className="h-4 w-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Paramètres des alertes</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Fréquence des alertes</label>
-                  <select className="w-full rounded-md border border-gray-200 p-2 text-sm">
-                    <option>Quotidienne</option>
-                    <option>Hebdomadaire</option>
-                    <option>Instantanée</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Mots-clés</label>
-                  <Input placeholder="React, Node.js, TypeScript..." />
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
         </div>
       </CardContent>
     </Card>
   )
 }
 
-// Composant JobStatsDashboard
 function JobStatsDashboard() {
   const stats = [
     { label: "Offres vues", value: "245", change: "+12%", icon: Eye, positive: true },
     { label: "Candidatures", value: "38", change: "+5%", icon: Briefcase, positive: true },
     { label: "Profil vu", value: "1,234", change: "+18%", icon: Users, positive: true },
-    { label: "Taux de réponse", value: "68%", change: "-2%", icon: Target, positive: false },
+    { label: "Réponses", value: "68%", change: "-2%", icon: Target, positive: false },
   ]
-
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
-        {stats.map((stat) => (
-          <Card key={stat.label} className="border-gray-200">
+      <div className="grid grid-cols-2 gap-2">
+        {stats.map((s) => (
+          <Card key={s.label} className="border-gray-200">
             <CardContent className="p-3">
-              <div className="flex items-start justify-between">
-                <stat.icon className="h-4 w-4 text-gray-400" />
-                {stat.positive ? (
-                  <ArrowUp className="h-3 w-3 text-green-600" />
-                ) : (
-                  <ArrowDown className="h-3 w-3 text-red-600" />
-                )}
-              </div>
-              <p className="text-lg font-bold mt-2">{stat.value}</p>
-              <p className="text-xs text-gray-500">{stat.label}</p>
-              <span className={`text-xs ${stat.positive ? 'text-green-600' : 'text-red-600'}`}>
-                {stat.change}
-              </span>
+              <div className="flex justify-between"><s.icon className="h-4 w-4 text-gray-400" />{s.positive ? <ArrowUp className="h-3 w-3 text-green-600" /> : <ArrowDown className="h-3 w-3 text-red-600" />}</div>
+              <p className="text-lg font-bold mt-1">{s.value}</p>
+              <p className="text-xs text-gray-500">{s.label}</p>
+              <span className={`text-xs ${s.positive ? 'text-green-600' : 'text-red-600'}`}>{s.change}</span>
             </CardContent>
           </Card>
         ))}
       </div>
-
       <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-            <h3 className="font-semibold">Passez Premium</h3>
-          </div>
-          <p className="text-sm text-blue-100 mb-3">
-            Mettez votre profil en avant et soyez visible par les recruteurs
-          </p>
-          <Button size="sm" variant="secondary" className="w-full">
-            <Zap className="h-3 w-3 mr-1" />
-            Essayer Premium
-          </Button>
+          <Star className="h-5 w-5 fill-yellow-400 text-yellow-400 mb-2" />
+          <h3 className="font-semibold">Premium</h3>
+          <p className="text-sm text-blue-100 mb-2">Soyez visible par les recruteurs</p>
+          <Button size="sm" variant="secondary" className="w-full">Essayer Premium</Button>
         </CardContent>
       </Card>
     </div>
   )
 }
 
-// Composant SavedJobsSidebar
 function SavedJobsSidebar() {
-  const savedJobs: SavedJob[] = [
-    { id: 1, title: "Senior Frontend Developer", company: "TechCorp", logo: "/companies/techcorp.jpg", location: "Paris", saved: "Il y a 2 jours" },
-    { id: 2, title: "UX Designer Senior", company: "DesignStudio", logo: "/companies/designstudio.jpg", location: "Lyon", saved: "Il y a 5 jours" },
-    { id: 3, title: "Product Manager", company: "StartupXYZ", logo: "/companies/startupxyz.jpg", location: "Remote", saved: "Il y a 1 semaine" },
+  const savedJobs = [
+    { id: 1, title: "Senior Frontend Developer", company: "TechCorp", location: "Paris", saved: "Il y a 2j" },
+    { id: 2, title: "UX Designer Senior", company: "DesignStudio", location: "Lyon", saved: "Il y a 5j" },
   ]
-
   return (
     <Card className="border-gray-200 shadow-sm">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Bookmark className="h-4 w-4 text-blue-600" />
-            <h3 className="font-semibold text-sm">Offres sauvegardées</h3>
-          </div>
+          <h3 className="font-semibold text-sm flex items-center gap-2"><Bookmark className="h-4 w-4 text-blue-600" />Sauvegardées</h3>
           <Badge variant="secondary" className="text-xs">{savedJobs.length}</Badge>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="h-[300px]">
-          <div className="space-y-0">
-            {savedJobs.map((job, index) => (
-              <div
-                key={job.id}
-                className={`p-3 hover:bg-gray-50 cursor-pointer transition-colors ${index !== savedJobs.length - 1 ? 'border-b' : ''}`}
-              >
-                <div className="flex items-start gap-3">
-                  <Avatar className="h-10 w-10 rounded-md">
-                    <AvatarImage src={job.logo} />
-                    <AvatarFallback>{job.company[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{job.title}</p>
-                    <p className="text-xs text-gray-500">{job.company}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="flex items-center gap-1 text-xs text-gray-400">
-                        <MapPin className="h-3 w-3" />{job.location}
-                      </span>
-                      <span className="flex items-center gap-1 text-xs text-gray-400">
-                        <Clock className="h-3 w-3" />{job.saved}
-                      </span>
-                    </div>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-7 w-7">
-                        <MoreHorizontal className="h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-40">
-                      <DropdownMenuItem>
-                        <ExternalLink className="h-3 w-3 mr-2" />
-                        Voir l'offre
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600">
-                        <Trash2 className="h-3 w-3 mr-2" />
-                        Retirer
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
-  )
-}
-
-// Composant CompanyCard
-function CompanyCard() {
-  const featuredCompanies: Company[] = [
-    { name: "TechCorp", logo: "/companies/techcorp.jpg", industry: "Technologie", employees: "5,000+", openPositions: 45, rating: 4.5, location: "Paris, France", hiring: true },
-    { name: "DesignStudio", logo: "/companies/designstudio.jpg", industry: "Design", employees: "200-500", openPositions: 12, rating: 4.8, location: "Lyon, France", hiring: true },
-    { name: "DataFlow", logo: "/companies/dataflow.jpg", industry: "Data & AI", employees: "1,000-5,000", openPositions: 28, rating: 4.3, location: "Remote", hiring: true },
-  ]
-
-  return (
-    <Card className="border-gray-200 shadow-sm">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-sm">Entreprises qui recrutent</h3>
-          <Button variant="ghost" size="sm" className="text-blue-600 text-xs">Voir tout</Button>
-        </div>
-        <div className="space-y-3">
-          {featuredCompanies.map((company) => (
-            <div key={company.name} className="p-3 border border-gray-100 rounded-lg hover:border-blue-200 hover:shadow-sm transition-all cursor-pointer">
-              <div className="flex items-start gap-3">
-                <div className="relative h-12 w-12 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
-                  <Image src={company.logo} alt={company.name} fill className="object-cover p-1" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-sm">{company.name}</h4>
-                    {company.hiring && (
-                      <Badge variant="secondary" className="bg-green-50 text-green-700 text-xs">
-                        <TrendingUp className="h-3 w-3 mr-1" />Recrute
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-0.5">{company.industry}</p>
-                  <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
-                    <span className="flex items-center gap-1"><Users className="h-3 w-3" />{company.employees}</span>
-                    <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{company.location}</span>
-                  </div>
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-                      <span className="text-xs font-medium">{company.rating}</span>
-                    </div>
-                    <span className="text-xs text-blue-600 font-medium">{company.openPositions} offres</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex gap-2 mt-2">
-                <Button size="sm" variant="outline" className="flex-1 h-7 text-xs">
-                  <Plus className="h-3 w-3 mr-1" />Suivre
-                </Button>
-                <Button size="sm" className="flex-1 h-7 text-xs">
-                  <ExternalLink className="h-3 w-3 mr-1" />Voir les offres
-                </Button>
+      <CardContent>
+        <div className="h-[300px] overflow-y-auto space-y-2">
+          {savedJobs.map((job) => (
+            <div key={job.id} className="flex items-start gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer">
+              <Avatar className="h-10 w-10 rounded-md">
+                <AvatarFallback>{job.company[0]}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-medium text-sm">{job.title}</p>
+                <p className="text-xs text-gray-500">{job.company}</p>
+                <span className="text-xs text-gray-400 flex items-center gap-1"><MapPin className="h-3 w-3" />{job.location}</span>
               </div>
             </div>
           ))}
@@ -694,214 +248,35 @@ function CompanyCard() {
   )
 }
 
-// Page Principale
 export default function JobsPage() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list")
-
-  const recommendedJobs: Job[] = [
-    {
-      id: "1",
-      title: "Senior Frontend Developer",
-      company: "TechCorp",
-      companyLogo: "/companies/techcorp.jpg",
-      location: "Paris, France",
-      type: "CDI",
-      salary: "55-75K€",
-      posted: "Il y a 2 heures",
-      description: "Nous recherchons un développeur frontend senior passionné par React et TypeScript pour rejoindre notre équipe produit. Vous travaillerez sur des projets innovants avec une stack moderne.",
-      skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "AWS"],
-      applicants: 45,
-      easyApply: true,
-    },
-    {
-      id: "2",
-      title: "UX Designer Senior",
-      company: "DesignStudio",
-      companyLogo: "/companies/designstudio.jpg",
-      location: "Lyon, France",
-      type: "CDI",
-      salary: "45-60K€",
-      posted: "Il y a 5 heures",
-      description: "DesignStudio recherche un UX Designer senior pour concevoir des expériences utilisateur exceptionnelles. Vous dirigerez les phases de recherche, conception et test utilisateur.",
-      skills: ["Figma", "User Research", "Design Systems", "Prototyping", "UI Design"],
-      applicants: 32,
-      promoted: true,
-    },
-    {
-      id: "3",
-      title: "Product Manager",
-      company: "StartupXYZ",
-      companyLogo: "/companies/startupxyz.jpg",
-      location: "Remote",
-      type: "CDI",
-      salary: "50-70K€",
-      posted: "Il y a 1 jour",
-      description: "Rejoignez notre startup en pleine croissance en tant que Product Manager. Vous définirez la vision produit et piloterez le développement de nouvelles fonctionnalités.",
-      skills: ["Product Strategy", "Agile", "Analytics", "A/B Testing", "Roadmapping"],
-      applicants: 28,
-    },
-    {
-      id: "4",
-      title: "DevOps Engineer",
-      company: "CloudTech",
-      companyLogo: "/companies/cloudtech.jpg",
-      location: "Bordeaux, France",
-      type: "CDI",
-      salary: "50-65K€",
-      posted: "Il y a 3 heures",
-      description: "CloudTech recherche un ingénieur DevOps pour gérer notre infrastructure cloud et améliorer nos pipelines CI/CD. Vous travaillerez avec Kubernetes et Terraform.",
-      skills: ["Kubernetes", "Docker", "AWS", "Terraform", "CI/CD", "Python"],
-      applicants: 15,
-      easyApply: true,
-    },
-    {
-      id: "5",
-      title: "Data Scientist",
-      company: "DataFlow",
-      companyLogo: "/companies/dataflow.jpg",
-      location: "Remote",
-      type: "CDI",
-      salary: "55-80K€",
-      posted: "Il y a 6 heures",
-      description: "DataFlow recrute un Data Scientist pour développer des modèles de machine learning et analyser des données complexes. Vous contribuerez à des projets innovants en IA.",
-      skills: ["Python", "Machine Learning", "TensorFlow", "SQL", "Statistics", "NLP"],
-      applicants: 52,
-      promoted: true,
-    },
+  const jobs: Job[] = [
+    { id: "1", title: "Senior Frontend Developer", company: "TechCorp", companyLogo: "/companies/techcorp.jpg", location: "Paris", type: "CDI", salary: "55-75K€", posted: "Il y a 2h", description: "Recherche développeur frontend senior React/TypeScript.", skills: ["React", "TypeScript", "Next.js"], applicants: 45, easyApply: true },
+    { id: "2", title: "UX Designer Senior", company: "DesignStudio", companyLogo: "/companies/designstudio.jpg", location: "Lyon", type: "CDI", salary: "45-60K€", posted: "Il y a 5h", description: "DesignStudio recherche UX Designer senior.", skills: ["Figma", "Design Systems"], applicants: 32, promoted: true },
+    { id: "3", title: "Product Manager", company: "StartupXYZ", companyLogo: "/companies/startupxyz.jpg", location: "Remote", type: "CDI", salary: "50-70K€", posted: "Il y a 1j", description: "Startup recherche Product Manager.", skills: ["Product Strategy", "Agile"], applicants: 28 },
   ]
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
-            <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-600" />
-                Emplois
-              </h1>
-              <div className="hidden md:flex items-center gap-1">
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <Compass className="h-4 w-4" />
-                  <span>Découvrir</span>
-                </Button>
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <Star className="h-4 w-4" />
-                  <span>Mes offres</span>
-                </Button>
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <Bell className="h-4 w-4" />
-                  <span>Alertes</span>
-                  <Badge variant="secondary" className="bg-red-100 text-red-600 text-xs ml-1">3</Badge>
-                </Button>
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <Bookmark className="h-4 w-4" />
-                  <span>Sauvegardées</span>
-                </Button>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="rounded-full">Publier une offre</Button>
-              <Button size="sm" className="rounded-full gap-2">
-                <Users className="h-4 w-4" />
-                Recruteurs
-              </Button>
-            </div>
-          </div>
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+          <h1 className="text-xl font-bold flex items-center gap-2"><Briefcase className="h-5 w-5 text-blue-600" />Emplois</h1>
+          <Button size="sm" className="rounded-full">Publier une offre</Button>
         </div>
       </header>
-
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
-        <div className="mb-6">
-          <JobAlertCard />
-        </div>
-
-        <div className="grid grid-cols-12 gap-6">
+        <JobAlertCard />
+        <div className="grid grid-cols-12 gap-6 mt-6">
           <aside className="hidden lg:block lg:col-span-3">
-            <div className="sticky top-20 space-y-4">
-              <JobStatsDashboard />
-            </div>
+            <div className="sticky top-20 space-y-4"><JobStatsDashboard /></div>
           </aside>
-
           <div className="col-span-12 lg:col-span-6">
-            <div className="mb-6">
-              <JobSearchFilters />
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <h2 className="font-semibold text-lg">Offres recommandées</h2>
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-700">1,234 offres</Badge>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Tabs defaultValue="relevant" className="hidden sm:block">
-                    <TabsList>
-                      <TabsTrigger value="relevant" className="text-xs">
-                        <TrendingUp className="h-3 w-3 mr-1" />Pertinentes
-                      </TabsTrigger>
-                      <TabsTrigger value="recent" className="text-xs">Récentes</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                  <div className="flex items-center gap-1 border-l pl-2">
-                    <Button
-                      variant={viewMode === "list" ? "secondary" : "ghost"}
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => setViewMode("list")}
-                    >
-                      <List className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === "grid" ? "secondary" : "ghost"}
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => setViewMode("grid")}
-                    >
-                      <Grid className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              {recommendedJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
-
-            <div className="text-center mt-6 mb-8">
-              <Button variant="outline" size="lg" className="gap-2">
-                <Briefcase className="h-4 w-4" />
-                Voir plus d'offres
-              </Button>
-            </div>
-
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6">
-              <h3 className="text-lg font-bold mb-2">Boostez votre carrière</h3>
-              <p className="text-sm text-blue-100 mb-4">
-                Accédez à des ressources exclusives pour développer vos compétences et trouver le job idéal
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="secondary" size="sm" className="w-full">CV Builder</Button>
-                <Button variant="secondary" size="sm" className="w-full">Coaching Carrière</Button>
-                <Button variant="secondary" size="sm" className="w-full">Salaire Moyen</Button>
-                <Button variant="secondary" size="sm" className="w-full">Préparation Entretien</Button>
-              </div>
+            <JobSearchFilters />
+            <div className="space-y-4 mt-4">
+              {jobs.map((job) => <JobCard key={job.id} job={job} />)}
             </div>
           </div>
-
           <aside className="hidden lg:block lg:col-span-3">
-            <div className="sticky top-20 space-y-4">
-              <SavedJobsSidebar />
-              <CompanyCard />
-            </div>
+            <div className="sticky top-20"><SavedJobsSidebar /></div>
           </aside>
         </div>
       </main>

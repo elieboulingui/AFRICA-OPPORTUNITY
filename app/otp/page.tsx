@@ -2,20 +2,54 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { ShieldCheck, Mail } from "lucide-react";
 
 export default function OtpPage() {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
+
+  const handleChange = (index: number, value: string) => {
+    if (value.length > 1) return;
+    
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !code[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").slice(0, 6);
+    const newCode = [...code];
+    pastedData.split("").forEach((char, i) => {
+      if (i < 6) newCode[i] = char;
+    });
+    setCode(newCode);
+    inputRefs.current[Math.min(pastedData.length, 5)]?.focus();
+  };
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/dashboard");
+    const fullCode = code.join("");
+    if (fullCode.length === 6) {
+      router.push("/dashboard");
+    }
   }
 
   return (
@@ -36,16 +70,29 @@ export default function OtpPage() {
                 <Mail size={16} />
                 <span>Code de vérification</span>
               </div>
-              <InputOTP value={code} onChange={(value) => setCode(value)} className="rounded-lg border border-[#E0DFDC] bg-transparent p-2">
-                <InputOTPGroup className="gap-2">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <InputOTPSlot key={index} index={index} className="h-14 w-12 rounded-lg text-center text-lg font-semibold" />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
+              
+              <div className="flex justify-center gap-2">
+                {code.map((digit, index) => (
+                  <Input
+                    key={index}
+                    ref={(el) => { inputRefs.current[index] = el }}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={index === 0 ? handlePaste : undefined}
+                    className="h-14 w-12 rounded-lg text-center text-lg font-semibold"
+                    required
+                  />
+                ))}
+              </div>
             </div>
 
-            <Button type="submit" className="w-full rounded-full bg-[#0A66C2] text-white hover:bg-[#004182]">Valider le code</Button>
+            <Button type="submit" className="w-full rounded-full bg-[#0A66C2] text-white hover:bg-[#004182]">
+              Valider le code
+            </Button>
           </form>
 
           <div className="text-center text-sm text-[#666666]">

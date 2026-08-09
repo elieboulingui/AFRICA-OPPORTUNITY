@@ -17,7 +17,7 @@ export function PostCard({ post }: PostCardProps) {
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <p className="text-[15px] font-semibold text-[#191919]">{post.author}</p>
-            <Badge variant="secondary" className="rounded-full bg-[#EBF4FD] text-[#0A66C2]">{post.category}</Badge>
+            <Badge variant="secondary" className="rounded-full bg-[#EBF4FD] text-[#0A66C2]">{post.category ?? "Actualité"}</Badge>
           </div>
           <p className="text-sm text-[#666666]">{post.title}</p>
           <p className="text-sm text-[#666666]">{post.time}</p>

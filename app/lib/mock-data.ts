@@ -8,6 +8,7 @@ export interface PostData {
   comments: string;
   shares: string;
   avatarColor: string;
+  category?: string;
 }
 
 export interface InvitationData {
